@@ -1,24 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { Layout } from "antd";
+import AppHeader from './components/AppHeader';
+import AppContent from "./components/AppContent";
+import { useAppSelector, useAppDispatch } from './store'
+import { fetchDataAsync, isAppLoading } from "./store/slices/appSlice";
+import { useEffect } from "react";
 
 function App() {
+  const dispatch = useAppDispatch();
+  const isLoading = useAppSelector(isAppLoading);
+
+  useEffect(() => {
+    dispatch(fetchDataAsync());
+  }, [dispatch]);
+
+  if (isLoading) {
+    return <>Loading...</>;
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Layout>
+        <AppHeader />
+        <AppContent />
+      </Layout>
     </div>
   );
 }
